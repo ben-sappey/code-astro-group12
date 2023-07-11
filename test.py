@@ -6,5 +6,5 @@ filepath = "/Users/bensappey/Downloads/Source_file_METEC_04NOV_2021_methane_back
 spectrum = file_read(filepath=filepath)
 print(spectrum)
 
-plt.plot(spectrum[1],spectrum[2])
-plt.show()
+# plt.plot()
+# plt.show()

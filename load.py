@@ -7,5 +7,6 @@ def file_read(filepath):
     #load a .csv file and output a dataframe with wavelength and intensity information
     spectrum  = pd.read_csv(filepath, header=[0])
     # print()
-    spectrum.columns = ["Wavenumber","Intensity"]
+    spectrum.columns.values[0] = 'Wavenumber'
+    spectrum.columns.values[1] = 'Intensity'
     return spectrum
