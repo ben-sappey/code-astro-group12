@@ -10,3 +10,4 @@ def file_read(filepath):
     spectrum.columns.values[0] = 'Wavenumber'
     spectrum.columns.values[1] = 'Intensity'
     return spectrum
+
