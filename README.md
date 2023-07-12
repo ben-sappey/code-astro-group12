@@ -1,2 +1,2 @@
-# code-astro-group12
+# teltrace
 Still figuring this out
