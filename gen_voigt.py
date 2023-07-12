@@ -40,4 +40,4 @@ plt.show()
 
 #Saving to a .csv file
 data = np.column_stack((x, y))
-np.savetxt('voigt_data.csv', data, delimiter=',', header='x,y', fmt='%.6f', comments='')
+np.savetxt('data/voigt_data.csv', data, delimiter=',', header='x,y', fmt='%.6f', comments='')
