@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import astropy.units as u
+import warnings
 
 def get_pressure(temp, species = 'h2o'):
     """
@@ -19,9 +20,18 @@ def get_pressure(temp, species = 'h2o'):
     if species.casefold() == 'h2o':
         # set Antoine equation coefficients -- calibrated in 379 - 573 K range
         # https://webbook.nist.gov/cgi/cbook.cgi?ID=C7732185&Mask=4&Type=ANTOINE&Plot=on#ANTOINE
-        a = 3.55959
-        b = 643.748
-        c = -198.043
+        if temp >= 376: #high temperature calibration
+            a = 3.55959
+            b = 643.748
+            c = -198.043
+        # set Antoine equation coefficients -- calibrated in 256 - 373 K range
+        else:
+            a = 4.6543
+            b = 1435.264
+            c = -64.848
+
+        if (temp < 256) or (temp > 573):
+            warnings.warn('Temperature outside of calibration range. Approximating P-T relation.')
 
     if species.casefold() == 'co2':
         # set Antoine equation coefficients -- calibrated in 154 - 196 K range
@@ -29,6 +39,9 @@ def get_pressure(temp, species = 'h2o'):
         a = 6.81228
         b = 1301.679
         c = -3.494
+
+        if (temp < 154) or (temp > 196):
+            warnings.warn('Temperature outside of calibration range. Approximating P-T relation.')
 
     if species.casefold() not in ['h2o', 'co2']:
         raise Exception('Specify chemical species -- "H2O" or "CO2"')
@@ -46,7 +59,7 @@ def object_profile(name, species = 'h2o',
     Return Voigt profile of line based on conditions of specific planet.
 
     Parameters:
-        name (str): Name of planet (without spaces).
+        name (str): Name of planet.
         species (str): 'H2O' or 'CO2' -- species from which to calculate the pressure.
             Passed to get_pressure().
 
@@ -63,13 +76,13 @@ def object_profile(name, species = 'h2o',
         Plot of line profile. 
     """
 
-    props = pd.read_csv('../data/planet_props.txt')
+    props = pd.read_csv('../data/props.txt', header = None, comment = '#', sep = '\t')
 
-    if name.casefold() not in props.names.str.casefold():
+    if name.casefold().str.replace(' ', '') not in props.name.str.casefold().str.replace(' ', ''):
         raise Exception('Planet conditions not found. List available planets with list_object.')
     
-    if name.casefold() in props.names.str.casefold():
-        planet_props = props.loc[props.names.str.casefold() == name.casefold()]
+    if name.casefold().str.replace(' ', '') in props.name.str.casefold().str.replace(' ', ''):
+        planet_props = props.loc[props.name.str.casefold().str.replace(' ', '') == name.casefold().str.replace(' ', '')]
 
         press = get_pressure(planet_props.temp, species)
 
@@ -81,10 +94,11 @@ def object_profile(name, species = 'h2o',
         plt.ylabel(ylabel)
         plt.xscale(xscale)
         plt.yscale(yscale)
+        plt.title(planet_props.name)
 
     
 
 def list_object():
-    props = pd.read_csv('PLACEHOLDER')
-    for i in props.names.str.casefold():
+    props = pd.read_csv('../data/props.txt', header = None, comment = '#', sep = '\t')
+    for i in props.names:
         print(i)
