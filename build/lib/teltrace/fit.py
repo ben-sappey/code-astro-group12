@@ -18,7 +18,7 @@ def fit_voigt(x,y,bounds=None):
     """
 
     if bounds==None:
-        popt,pcov = curve_fit(xdata=x,ydata=y,f = voigt)
+        popt,pcov =  curve_fit(xdata=x,ydata=y,f = voigt)
         return popt,pcov
     else:
         popt,pcov =  curve_fit(xdata=x,ydata=y,f = voigt,bounds=bounds)
