@@ -119,7 +119,7 @@ def gamma_l(temp, press, species):
 
     gamma_l = ((temp*u.K)/(296*u.K))**n * press*u.kPa.to(u.atm) * (gl_mol/(u.cm*u.atm) * partial_press) #would sum, but only one species
 
-    return gamma_l.value
+    return gamma_l.to(1/u.cm).value
 
 def gamma_voigt(temp, press, species, v0):
     """
