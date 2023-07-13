@@ -20,3 +20,23 @@ def file_read(filepath):
     spectrum.columns.values[1] = 'Intensity'
     return spectrum
 
+def fits_read(filepath, wavekey = 'wave', speckey = 'spec'):
+    """
+    Read in spectrum from a FITS file containing a table.
+
+    Parameters:
+        filepath (str): Path to FITS file to be read in.
+        wavekey (str): Key corresponding to wavelength information in the FITS file.
+        speckey (str): Key corresponding to intensity information in the FITS file.
+
+    Returns:
+        wave (arr): Wavelengths axis from FITS file.
+        spec (arr): Intensity axis from FITS file.
+    """
+
+    dat = fits.open(filepath)[0].data
+
+    wave, spec = dat[wavekey], dat[speckey]
+
+    return wave, spec
+
