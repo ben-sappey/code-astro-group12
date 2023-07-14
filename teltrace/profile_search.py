@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import astropy.units as u
 import warnings
+from gen_voigt import gamma_g, voigt_tp
 
 def get_pressure(temp, species = 'h2o'):
     """
@@ -51,7 +52,7 @@ def get_pressure(temp, species = 'h2o'):
     
     return press.value
 
-def object_profile(name, species = 'h2o',
+def object_profile(name, v, v0, species = 'h2o',
                    figsize = (5, 5), color = 'gray', ls = '-', 
                    xlabel = 'x', ylabel = 'intensity', 
                    xscale = 'linear', yscale = 'linear'):
@@ -61,7 +62,9 @@ def object_profile(name, species = 'h2o',
     Parameters:
         name (str): Name of planet.
         species (str): 'H2O' or 'CO2' -- species from which to calculate the pressure.
-            Passed to get_pressure().
+        v (arr):  Wavenumber -- 1/cm.
+        v0 (float): Central wavenumber of line -- in 1/cm.
+
 
         See matplotlib documentation for following --
             figsize (tuple): Size of plotted figure.
@@ -86,7 +89,9 @@ def object_profile(name, species = 'h2o',
 
         press = get_pressure(planet_props.temp, species)
 
-        x, spec = PLACEHOLDER_VOIGT_FUNCTION(planet_props.temp, press)
+        gg = gamma_g(temp, species, v0)
+
+        x, spec = (v - v0)/gg, voigt_tp(v, planet_props.temp, press, species, v0)
 
         fig = plt.figure(figsize = figsize)
         plt.plot(x, spec, color = color, ls = ls)
