@@ -3,6 +3,7 @@ from scipy.special import wofz
 import matplotlib.pyplot as plt
 import astropy.units as u
 import astropy.constants as c
+from scipy.optimize import curve_fit
 
 def voigt(x, dx, sigma, gamma, amplitude):
     """Generate a Voigt profile at positions x, given the parameters sigma and gamma.
@@ -90,7 +91,7 @@ def gamma_g(temp, species, v0):
     if species.caseefold() not in ['h2o', 'co2']:
         raise Exception('Specify chemical species -- "H2O" or "CO2"')
     
-    gamma_g = np.sqrt(2*c.k_B*temp*u.K/mass) * (v0/u.cm)/c.c.to(u.cm/u.s)).to(1/u.cm)
+    gamma_g = (np.sqrt(2*c.k_B*temp*u.K/mass) * (v0/u.cm)/c.c.to(u.cm/u.s)).to(1/u.cm)
 
     return gamma_g.value
 
