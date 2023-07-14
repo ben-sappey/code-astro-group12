@@ -3,6 +3,7 @@ from scipy.special import wofz
 import matplotlib.pyplot as plt
 import astropy.units as u
 import astropy.constants as c
+from scipy.optimize import curve_fit
 
 def voigt(x, dx, sigma, gamma, amplitude):
     """Generate a Voigt profile at positions x, given the parameters sigma and gamma.
@@ -73,10 +74,11 @@ plt.show()
 def gamma_g(temp, species, v0):
     """
     Return the width of the Gaussian component of the Voigt profile.
+    Based on https://academic.oup.com/mnras/article/458/2/1427/2589008.
 
     Parameters:
         temp (float): Temperature of planetary atmosphere in K.
-        species (str): 'H2O' or 'CO2' -- species from which to calculate the pressure.
+        species (str): 'H2O' or 'CO2' -- for which to return broadening.
         v0 (float): Central wavenumber of line -- in 1/cm.
 
     Returns:
@@ -90,18 +92,19 @@ def gamma_g(temp, species, v0):
     if species.caseefold() not in ['h2o', 'co2']:
         raise Exception('Specify chemical species -- "H2O" or "CO2"')
     
-    gamma_g = np.sqrt(2*c.k_B*temp*u.K/mass) * (v0/u.cm)/c.c.to(u.cm/u.s)).to(1/u.cm)
+    gamma_g = (np.sqrt(2*c.k_B*temp*u.K/mass) * (v0/u.cm)/c.c.to(u.cm/u.s)).to(1/u.cm)
 
     return gamma_g.value
 
 def gamma_l(temp, press, species):
     """
     Return the width of the Lorentzian component of the Voigt profile.
+    Based on https://academic.oup.com/mnras/article/458/2/1427/2589008.
 
     Parameters:
         temp (float): Temperature of planetary atmosphere in K.
         press (float): Pressure in kPa.
-        species (str): 'H2O' or 'CO2' -- species from which to calculate the pressure.
+        species (str): 'H2O' or 'CO2' -- species for which to return broadening.
 
     Returns:
         gamma_l (float): Width of Lorentzian component of Voigt profile in 1/cm.
@@ -124,17 +127,65 @@ def gamma_l(temp, press, species):
 def gamma_voigt(temp, press, species, v0):
     """
     Return the Voigt profile width based on Gaussian and Lorentzian components.
+    Based on https://academic.oup.com/mnras/article/458/2/1427/2589008.
 
     Parameters:
         temp (float): Temperature of planetary atmosphere in K.
         press (float): Pressure in kPa.
-        species (str): 'H2O' or 'CO2' -- species from which to calculate the pressure.
+        species (str): 'H2O' or 'CO2' -- species for which to return broadening.
         v0 (float): Central wavenumber of line -- in 1/cm.
     
     Returns:
         gamma_voigt (float): Width of Voigt profile in 1/cm.
     """
-    gg = gamma_g()
-    gl = gamma_l()
+    gg = gamma_g(temp, species, v0)
+    gl = gamma_l(temp, press, species)
 
     return 0.5346*gl + np.sqrt(0.2166*gl**2 + gg**2)
+
+def voigt_tp(v, temp, press, species, v0):
+    """
+    Parameterize the Voigt profile in terms of temperature and pressure.
+    Based on https://academic.oup.com/mnras/article/458/2/1427/2589008.
+
+    Parameters:
+        v (arr):  Wavenumber -- 1/cm.
+        temp (float): Temperature of planetary atmosphere in K.
+        press (float): Pressure in atm.
+        species (str): 'H2O' or 'CO2' -- species for which to return broadening.
+        v0 (float): Central wavenumber of line -- in 1/cm.
+    
+    Returns:
+        Voigt profile as a function of temperature and pressure.
+    """
+    gg = gamma_g(temp, species, v0)
+    gl = gamma_l(temp, press, species)
+    uu = (v - v0)/gg
+    a = gl/gg
+
+    return np.real(wofz(complex(uu, a)))
+
+def fit_voigt_tp(wave, spec, v, species, v0, waveunits = u.cm, **kwargs):
+    """
+    Function to directly fit the Voigt profile for temperature and pressure.
+    Based on https://academic.oup.com/mnras/article/458/2/1427/2589008.
+
+    Parameters:
+        v (arr):  Wavenumber -- 1/cm.
+        species (str): 'H2O' or 'CO2' -- species for which to return broadening.
+        v0 (float): Central wavenumber of line -- in 1/cm.
+        waveunits (astropy units object): Units of wavelength.
+        **kwargs: To pass to curve_fit.
+    
+    Returns:
+        temp (float): Temperature of planetary atmosphere in K.
+        press (float): Pressure in kPa.
+    """
+
+    popt, pcov = curve_fit(lambda v, temp, press: voigt_tp(v, temp, press, species, v0), 
+                           1/(wave*waveunits.to(u.cm)), spec, **kwargs)
+    
+    temp, press = popt
+    
+    return temp, press*u.atm.to(u.kPa)
+    
