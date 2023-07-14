@@ -100,5 +100,5 @@ def object_profile(name, species = 'h2o',
 
 def list_object():
     props = pd.read_csv('../data/props.txt', header = None, comment = '#', sep = '\t')
-    for i in props.names:
+    for i in props.name:
         print(i)
