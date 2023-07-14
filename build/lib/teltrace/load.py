@@ -39,4 +39,3 @@ def fits_read(filepath, wavekey = 'wave', speckey = 'spec'):
     wave, spec = dat[wavekey], dat[speckey]
 
     return wave, spec
-

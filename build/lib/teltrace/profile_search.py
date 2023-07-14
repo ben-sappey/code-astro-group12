@@ -4,7 +4,25 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-def object_profile(name, 
+def get_pressure(temp, species = 'h2o'):
+    """
+    Return pressure based on pressure-temperature curve for H2O or CO2.
+
+    Parameters:
+        temp (float): Temperature of planetary atmosphere in K.
+        species (str): 'H2O' or 'CO2' -- species from which to calculate the pressure.
+    
+    Returns:
+        pressure (float): Pressure in kPa.
+    """
+    if species.casefold() == 'h2o':
+
+    if species.casefold() == 'co2':
+
+    if species.caseefold() not in ['h2o', 'co2']:
+        raise Exception('Specify chemical species -- "H2O" or "CO2"')
+
+def object_profile(name, species = 'h2o',
                    figsize = (5, 5), color = 'gray', ls = '-', 
                    xlabel = 'x', ylabel = 'intensity', 
                    xscale = 'linear', yscale = 'linear'):
@@ -13,6 +31,8 @@ def object_profile(name,
 
     Parameters:
         name (str): Name of planet (without spaces).
+        species (str): 'H2O' or 'CO2' -- species from which to calculate the pressure.
+            Passed to get_pressure().
 
         See matplotlib documentation for following --
             figsize (tuple): Size of plotted figure.
@@ -35,7 +55,9 @@ def object_profile(name,
     if name.casefold() in props.names.str.casefold():
         planet_props = props.loc[props.names.str.casefold() == name.casefold()]
 
-        x, spec = PLACEHOLDER_VOIGT_FUNCTION
+        press = get_pressure(planet_props.temp, species)
+
+        x, spec = PLACEHOLDER_VOIGT_FUNCTION(planet_props.temp, press)
 
         fig = plt.figure(figsize = figsize)
         plt.plot(x, spec, color = color, ls = ls)
