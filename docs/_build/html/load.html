@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spectrum Loading Utilities &mdash; teltrace 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Voigt Profile generation" href="gen_voigt.html" />
+    <link rel="prev" title="Fitting Utilities" href="fit.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            teltrace
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="fit.html">Fitting Utilities</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Spectrum Loading Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gen_voigt.html">Voigt Profile generation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">teltrace</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Spectrum Loading Utilities</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/load.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="spectrum-loading-utilities">
+<span id="load"></span><h1>Spectrum Loading Utilities<a class="headerlink" href="#spectrum-loading-utilities" title="Permalink to this heading"></a></h1>
+<p>Functions to load data and return a
+Pandas data structure</p>
+<span class="target" id="module-load"></span><dl class="py function">
+<dt class="sig sig-object py" id="load.file_read">
+<span class="sig-prename descclassname"><span class="pre">load.</span></span><span class="sig-name descname"><span class="pre">file_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#load.file_read" title="Permalink to this definition"></a></dt>
+<dd><p>Read a .csv file into a dataframe to be manipulated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> – (str, path object, or file-like object) .csv file to be read in</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>spectrum (pandas.df) Dataframe containing wavenumber information
+in the first column and intensity of line information in the second column</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="load.fits_read">
+<span class="sig-prename descclassname"><span class="pre">load.</span></span><span class="sig-name descname"><span class="pre">fits_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavekey</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wave'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speckey</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'spec'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#load.fits_read" title="Permalink to this definition"></a></dt>
+<dd><p>Read in spectrum from a FITS file containing a table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>str</em>) – Path to FITS file to be read in.</p></li>
+<li><p><strong>wavekey</strong> (<em>str</em>) – Key corresponding to wavelength information in the FITS file.</p></li>
+<li><p><strong>speckey</strong> (<em>str</em>) – Key corresponding to intensity information in the FITS file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Wavelengths axis from FITS file.
+spec (arr): Intensity axis from FITS file.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>wave (arr)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fit.html" class="btn btn-neutral float-left" title="Fitting Utilities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gen_voigt.html" class="btn btn-neutral float-right" title="Voigt Profile generation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Ben Sappey, Ava Polzin, Anshika Pandey.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

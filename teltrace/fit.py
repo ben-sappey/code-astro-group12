@@ -1,8 +1,10 @@
 import matplotlib.pyplot as plt
+import numpy as np
 from scipy.optimize import curve_fit
-from teltrace.gen_voigt import voigt,generate_voigt_profile
+from teltrace.gen_voigt import voigt, generate_voigt_profile
 
-def fit_voigt(x,y,bounds=None):
+def fit_voigt(x, y, bounds=None):
+
     """Function to fit a Voigt profile to a line
 
     Args:
@@ -17,11 +19,15 @@ def fit_voigt(x,y,bounds=None):
         pcov (2D-array), estimated approximate covariance of popt 
     """
 
-    if bounds==None:
-        popt,pcov = curve_fit(xdata=x,ydata=y,f = voigt)
+    if bounds is None:
+        popt, pcov = curve_fit(xdata=x, ydata=y,
+                               f=voigt,
+                               p0=[x[np.argmax(y)], None, None, 2*np.max(y)])
         return popt,pcov
     else:
-        popt,pcov =  curve_fit(xdata=x,ydata=y,f = voigt,bounds=bounds)
+        popt,pcov =  curve_fit(xdata=x,ydata=y,f = voigt,
+                               p0=[x[np.argmax(y)], None, None, 2*np.max(y)],
+                               bounds=bounds)
         return popt,pcov
 
 def plot_fit_voigt(x,y,bounds=None):
