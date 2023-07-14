@@ -74,6 +74,7 @@ plt.show()
 def gamma_g(temp, species, v0):
     """
     Return the width of the Gaussian component of the Voigt profile.
+    Based on https://academic.oup.com/mnras/article/458/2/1427/2589008.
 
     Parameters:
         temp (float): Temperature of planetary atmosphere in K.
@@ -98,6 +99,7 @@ def gamma_g(temp, species, v0):
 def gamma_l(temp, press, species):
     """
     Return the width of the Lorentzian component of the Voigt profile.
+    Based on https://academic.oup.com/mnras/article/458/2/1427/2589008.
 
     Parameters:
         temp (float): Temperature of planetary atmosphere in K.
@@ -125,6 +127,7 @@ def gamma_l(temp, press, species):
 def gamma_voigt(temp, press, species, v0):
     """
     Return the Voigt profile width based on Gaussian and Lorentzian components.
+    Based on https://academic.oup.com/mnras/article/458/2/1427/2589008.
 
     Parameters:
         temp (float): Temperature of planetary atmosphere in K.
@@ -143,6 +146,7 @@ def gamma_voigt(temp, press, species, v0):
 def voigt_tp(v, temp, press, species, v0):
     """
     Parameterize the Voigt profile in terms of temperature and pressure.
+    Based on https://academic.oup.com/mnras/article/458/2/1427/2589008.
 
     Parameters:
         v (arr):  Wavenumber -- 1/cm.
@@ -164,6 +168,7 @@ def voigt_tp(v, temp, press, species, v0):
 def fit_voigt_tp(wave, spec, v, species, v0, waveunits = u.cm, **kwargs):
     """
     Function to directly fit the Voigt profile for temperature and pressure.
+    Based on https://academic.oup.com/mnras/article/458/2/1427/2589008.
 
     Parameters:
         v (arr):  Wavenumber -- 1/cm.
