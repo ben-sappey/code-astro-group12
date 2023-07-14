@@ -134,7 +134,52 @@ def gamma_voigt(temp, press, species, v0):
     Returns:
         gamma_voigt (float): Width of Voigt profile in 1/cm.
     """
-    gg = gamma_g()
-    gl = gamma_l()
+    gg = gamma_g(temp, species, v0)
+    gl = gamma_l(temp, press, species)
 
     return 0.5346*gl + np.sqrt(0.2166*gl**2 + gg**2)
+
+def voigt_tp(v, temp, press, species, v0):
+    """
+    Parameterize the Voigt profile in terms of temperature and pressure.
+
+    Parameters:
+        v (arr):  Wavenumber -- 1/cm.
+        temp (float): Temperature of planetary atmosphere in K.
+        press (float): Pressure in atm.
+        species (str): 'H2O' or 'CO2' -- species from which to calculate the pressure.
+        v0 (float): Central wavenumber of line -- in 1/cm.
+    
+    Returns:
+        Voigt profile as a function of temperature and pressure.
+    """
+    gg = gamma_g(temp, species, v0)
+    gl = gamma_l(temp, press, species)
+    uu = (v - v0)/gg
+    a = gl/gg
+
+    return np.real(wofz(complex(uu, a)))
+
+def fit_voigt_tp(wave, spec, v, species, v0, waveunits = u.cm, **kwargs):
+    """
+    Function to directly fit the Voigt profile for temperature and pressure.
+
+    Parameters:
+        v (arr):  Wavenumber -- 1/cm.
+        species (str): 'H2O' or 'CO2' -- species from which to calculate the pressure.
+        v0 (float): Central wavenumber of line -- in 1/cm.
+        waveunits (astropy units object): Units of wavelength.
+        **kwargs: To pass to curve_fit.
+    
+    Returns:
+        temp (float): Temperature of planetary atmosphere in K.
+        press (float): Pressure in kPa.
+    """
+
+    popt, pcov = curve_fit(lambda v, temp, press: voigt_tp(v, temp, press, species, v0), 
+                           1/(wave*waveunits.to(u.cm)), spec, **kwargs)
+    
+    temp, press = popt
+    
+    return temp, press*u.atm.to(u.kPa)
+    
