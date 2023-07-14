@@ -61,7 +61,7 @@ def object_profile(name, v, v0, species = 'h2o',
 
     Parameters:
         name (str): Name of planet.
-        species (str): 'H2O' or 'CO2' -- species from which to calculate the pressure.
+        species (str): 'H2O' or 'CO2' -- species for which to model line.
         v (arr):  Wavenumber -- 1/cm.
         v0 (float): Central wavenumber of line -- in 1/cm.
 

@@ -78,7 +78,7 @@ def gamma_g(temp, species, v0):
 
     Parameters:
         temp (float): Temperature of planetary atmosphere in K.
-        species (str): 'H2O' or 'CO2' -- species from which to calculate the pressure.
+        species (str): 'H2O' or 'CO2' -- for which to return broadening.
         v0 (float): Central wavenumber of line -- in 1/cm.
 
     Returns:
@@ -104,7 +104,7 @@ def gamma_l(temp, press, species):
     Parameters:
         temp (float): Temperature of planetary atmosphere in K.
         press (float): Pressure in kPa.
-        species (str): 'H2O' or 'CO2' -- species from which to calculate the pressure.
+        species (str): 'H2O' or 'CO2' -- species for which to return broadening.
 
     Returns:
         gamma_l (float): Width of Lorentzian component of Voigt profile in 1/cm.
@@ -132,7 +132,7 @@ def gamma_voigt(temp, press, species, v0):
     Parameters:
         temp (float): Temperature of planetary atmosphere in K.
         press (float): Pressure in kPa.
-        species (str): 'H2O' or 'CO2' -- species from which to calculate the pressure.
+        species (str): 'H2O' or 'CO2' -- species for which to return broadening.
         v0 (float): Central wavenumber of line -- in 1/cm.
     
     Returns:
@@ -152,7 +152,7 @@ def voigt_tp(v, temp, press, species, v0):
         v (arr):  Wavenumber -- 1/cm.
         temp (float): Temperature of planetary atmosphere in K.
         press (float): Pressure in atm.
-        species (str): 'H2O' or 'CO2' -- species from which to calculate the pressure.
+        species (str): 'H2O' or 'CO2' -- species for which to return broadening.
         v0 (float): Central wavenumber of line -- in 1/cm.
     
     Returns:
@@ -172,7 +172,7 @@ def fit_voigt_tp(wave, spec, v, species, v0, waveunits = u.cm, **kwargs):
 
     Parameters:
         v (arr):  Wavenumber -- 1/cm.
-        species (str): 'H2O' or 'CO2' -- species from which to calculate the pressure.
+        species (str): 'H2O' or 'CO2' -- species for which to return broadening.
         v0 (float): Central wavenumber of line -- in 1/cm.
         waveunits (astropy units object): Units of wavelength.
         **kwargs: To pass to curve_fit.
